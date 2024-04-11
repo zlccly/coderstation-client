@@ -14,7 +14,6 @@ function NavHeader(props) {
                 <NavLink to='/' className='navgation'>问答</NavLink>
                 <NavLink to='/books' className='navgation'>书籍</NavLink>
                 <NavLink to='/interviews' className='navgation'>面试题</NavLink>
-                <NavLink to='/' className='navgation'>视频</NavLink>
                 <a href="https://duyi.ke.qq.com/" className='navgation'>视频教程</a>
             </nav>
             {/* 搜索框 */}
