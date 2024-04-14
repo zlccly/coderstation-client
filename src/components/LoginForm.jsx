@@ -11,7 +11,13 @@ import {
   message,
 } from "antd";
 import styles from "../css/LoginForm.module.css";
-import { getCaptcha, userIsExist, addUser } from "../api/user";
+import {
+  getCaptcha,
+  userIsExist,
+  addUser,
+  userLogin,
+  getUserById,
+} from "../api/user";
 import { useDispatch } from "react-redux";
 import { initUserInfo, changeLoginStatus } from "../redux/userSlice";
 
@@ -30,7 +36,29 @@ function LoginForm(props) {
   }
 
   // 登录form表单完成
-  function loginHandle() {}
+  async function loginHandle() {
+    const result = await userLogin(loginInfo);
+    if (result.data) {
+      const data = result.data;
+      if (!data.data) {
+        message.warning("密码不正确");
+        captchaClickHandle();
+      } else if (!data.data.enabled) {
+        message.warning("账号被禁用");
+        captchaClickHandle();
+      } else {
+        // 将token存储到本地
+        localStorage.userToken = data.token;
+        const result = await getUserById(data.data._id);
+        // 更新用户登录状态并将用户信息存储到本地
+        dispatch(initUserInfo(result.data));
+        dispatch(changeLoginStatus(true));
+        handleCancel();
+      }
+    } else {
+      message.warning("验证码错误");
+    }
+  }
   // 登录form表单ref
   const loginFormRef = useRef();
   // 注册form表单ref
@@ -94,6 +122,7 @@ function LoginForm(props) {
       captcha: "",
       remember: false,
     });
+    // 关闭模态框
     props.closeModal();
   }
   // 注册完成(rom表单)
@@ -104,7 +133,7 @@ function LoginForm(props) {
       // 还需将用户的信息存储到数据仓库中
       dispatch(initUserInfo(result.data));
       dispatch(changeLoginStatus(true));
-      handleCancel()
+      handleCancel();
     } else {
       message.warning(result.msg);
       captchaClickHandle();

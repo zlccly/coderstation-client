@@ -10,6 +10,10 @@ service.interceptors.request.use(
     // 一般是添加token
 
     // 请求放行
+    const token = localStorage.getItem("userToken");
+    if (token) {
+      config.headers["Authorization"] = "Bearer " + token;
+    }
     return config;
   },
   (err) => {
@@ -19,7 +23,6 @@ service.interceptors.request.use(
 // 响应拦截
 service.interceptors.response.use(
   (response) => {
-    console.log(response, "sdhfsiodhfo");
     // 拦截到请求后，可以进行各种判断
     const res = response.data;
     return res;

@@ -27,10 +27,40 @@ export function userIsExist(loginId) {
  *
  */
 export function addUser(newUserInfo) {
-  console.log(newUserInfo, "hhhhhhhhyyyy")
   return request({
     url: "/api/user/",
     data: newUserInfo,
     method: "POST",
+  });
+}
+
+/**
+ * 用户登录
+ */
+export function userLogin(loginInfo) {
+  return request({
+    url: "/api/user/login",
+    data: loginInfo,
+    method: "POST",
+  });
+}
+
+/**
+ * 根据id来查找用户
+ */
+export function getUserById(id) {
+  return request({
+    url: `/api/user/${id}`,
+    method: "GET",
+  });
+}
+
+/**
+ * 恢复登录状态
+ */
+export function getInfo() {
+  return request({
+    url: "/api/user/whoami",
+    method: "GET",
   });
 }
