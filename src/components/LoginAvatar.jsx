@@ -1,12 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux'
-import { Button, List, Popover, Avatar } from "antd"
+import { Button, List, Popover, Avatar, Image } from "antd"
 import { UserOutlined } from '@ant-design/icons';
 import styles from '../css/LoginAvatar.module.css'
 
 
 function LoginAvatar(props) {
-    const { isLogin } = useSelector(state => state.user)
+    const { isLogin, userInfo } = useSelector(state => state.user)
     let loginStatus = null
     if (isLogin) {
         const content = (<List size='large' dataSource={["个人中心", "退出登录"]} renderItem={item => (
@@ -15,7 +15,7 @@ function LoginAvatar(props) {
         loginStatus = (
             <Popover content={content}  placement="bottom">
                 <div className={styles.avatarContainer}>
-                    <Avatar src="" size="large" icon={<UserOutlined />} />
+                    <Avatar src={<Image src={userInfo?.avatar}></Image>} size="large" icon={<UserOutlined />} />
                 </div>
             </Popover>
         )
