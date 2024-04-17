@@ -2,10 +2,36 @@ import React from "react";
 import styles from "../css/IssueItem.module.css";
 import { formatDate } from "../utils/tools";
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { getTypeList } from "../redux/typeSlice";
+import { Tag } from "antd";
+import { getUserById } from "../api/user";
 
 function IssueItem(props) {
+  const dispatch = useDispatch();
   const { typeList } = useSelector((state) => state.type);
-  console.log(typeList, "初始化");
+  const [userInfo, setUserInfo] = useState({});
+  const colorArr = [
+    "#108ee9",
+    "#2db7f5",
+    "#f50",
+    "green",
+    "#87d068",
+    "blue",
+    "red",
+    "purple",
+  ];
+  useEffect(() => {
+    if (!typeList.length) {
+      dispatch(getTypeList());
+    }
+    async function fecthData() {
+      const result = await getUserById(props.issueInfo.userId);
+      setUserInfo(result.data);
+    }
+    fecthData()
+  }, []);
+  const type = typeList.find((item) => item._id === props.issueInfo.typeId);
 
   return (
     <div className={styles.container}>
@@ -23,8 +49,13 @@ function IssueItem(props) {
       <div className={styles.issueContainer}>
         <div className={styles.top}>{props.issueInfo.issueTitle}</div>
         <div className={styles.bottom}>
-          <div className={styles.left}></div>
+          <div className={styles.left}>
+            <Tag color={colorArr[typeList.indexOf(type) % colorArr.length]}>
+              {type?.typeName}
+            </Tag>
+          </div>
           <div className={styles.right}>
+            <Tag color="volcano">{userInfo.nickname}</Tag>
             <span>{formatDate(props.issueInfo.issueDate, "year")}</span>
           </div>
         </div>
