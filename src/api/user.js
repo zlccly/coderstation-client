@@ -64,3 +64,14 @@ export function getInfo() {
     method: "GET",
   });
 }
+
+/**
+ * 积分前十用户
+ */
+
+export function getUserByPointsRank() {
+  return request({
+    url: "/api/user/pointsrank",
+    method: "GET",
+  });
+}

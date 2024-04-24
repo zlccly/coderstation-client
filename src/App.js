@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import NavHeader from "./components/NavHeader";
 import PageFooter from "./components/PageFooter";
-import { Layout } from "antd";
+import { Layout, message } from "antd";
 import "./css/App.css";
 import RouteConfig from "./router";
 import LoginForm from "./components/LoginForm";
