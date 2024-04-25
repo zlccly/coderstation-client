@@ -82,3 +82,14 @@ export function formatDate(timestamp, part) {
 
   return str;
 }
+
+export function typeOptionCreator(Select, typeList) {
+  let optionContainer = typeList.map((item) => {
+    return (
+      <Select.Option value={item._id} key={item._id}>
+        {item.typeName}
+      </Select.Option>
+    );
+  });
+  return optionContainer;
+}

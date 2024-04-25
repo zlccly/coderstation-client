@@ -13,7 +13,7 @@ function AddIssueBtn(props) {
   function clickHandle() {
     console.log("点击");
     if (isLogin) {
-      navigate("/interviews");
+      navigate("/addIssue");
     } else {
       message.warning("请先登录");
     }
