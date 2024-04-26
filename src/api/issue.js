@@ -13,3 +13,15 @@ export function getIssutByPage(params) {
     },
   });
 }
+
+
+/**
+ * 新增问答
+ */
+export function addIssue(params) {
+  return request({
+    url: "/api/issue/",
+    method: "POST",
+    data: params,
+  });
+}

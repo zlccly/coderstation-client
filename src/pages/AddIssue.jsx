@@ -1,11 +1,17 @@
-import { useRef, useState } from "react";
-import { Form, Input, Select, Button } from "antd";
+import { useRef, useState, useEffect } from "react";
+import { Form, Input, Select, Button, message } from "antd";
 import styles from "../css/AddIssue.module.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { typeOptionCreator } from "../utils/tools";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
+import { getTypeList } from "../redux/typeSlice";
+import { addIssue } from "../api/issue";
+import { useNavigate } from "react-router-dom";
+
 function AddIssue(props) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const formRef = useRef();
   const editorRef = useRef();
   const [issueInfo, setIssueInfo] = useState({
@@ -15,7 +21,12 @@ function AddIssue(props) {
     typeId: "",
   });
   const { typeList } = useSelector((state) => state.type);
-
+  const { userInfo } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!typeList.length) {
+      dispatch(getTypeList());
+    }
+  }, []);
   function updateInfo(newContent, key) {
     setIssueInfo({
       ...issueInfo,
@@ -23,9 +34,22 @@ function AddIssue(props) {
     });
   }
 
-  function handleChange() {}
+  function handleChange(value) {
+    updateInfo(value, "typeId");
+  }
   // 提交问答
-  function addHandle() {}
+  function addHandle() {
+    const content = editorRef.current.getInstance().getHTML();
+    console.log(content, "content");
+
+    addIssue({
+      ...issueInfo,
+      issueContent: content,
+      userId: userInfo._id,
+    });
+    navigate("/");
+    message.success("你的问题已提交，审核通过后将会进行展示");
+  }
   return (
     <div className={styles.container}>
       <Form
